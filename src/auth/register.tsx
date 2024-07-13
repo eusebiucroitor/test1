@@ -5,6 +5,7 @@ import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel } from '../components/ui/form';
 import { Input } from '../components/ui/input';
 import { Checkbox } from '../components/ui/checkbox'; 
+import {  redirect, useNavigate } from 'react-router-dom';
 
 const formSchema = z.object({
   first_name: z.string().min(1, {
@@ -25,6 +26,7 @@ const formSchema = z.object({
 });
 
 const Register = () => {
+  const navigate = useNavigate();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -45,13 +47,13 @@ const Register = () => {
       body: JSON.stringify(values),
     });
 
-    if (!res.ok) {
+    if (res.ok) {
+      navigate('/auth/login');
+    } else {
       const error = await res.json();
       console.error("Error:", error.message);
-      return null;
+      
     }
-
-    console.log("Cont succes")
   }
 
   return (
@@ -59,7 +61,7 @@ const Register = () => {
       <div className='flex flex-col justify-center items-center w-1/2 bg-gray-100'>
         <h1 className='text-3xl font-bold mt-4'>Let's Grow Your Business!</h1>
         <p className='mt-2 text-gray-600'>Verra gravida puruituent pharetra amet, lorem lacinia.</p>
-        <img src='/path/to/your/image.png' alt='Illustration' className='h-1/2' />
+        <img src="src\image\image_register.png" alt='Illustration' className='h-1/2' />
       </div>
       <div className='flex flex-col justify-center items-center w-1/2 bg-white'>
         <h2 className='text-3xl font-bold mb-4'>Create Account</h2>
